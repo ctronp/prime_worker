@@ -1,60 +1,32 @@
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
-use prime_check;
-use prime_check::IsPrime;
+use std::sync::Arc;
+use std::sync::atomic::{AtomicU16, Ordering};
+use actix_web::{web, App, HttpRequest, HttpServer, Responder, HttpResponse};
 
-#[get("/")]
-async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("primes number")
+async fn greet(req: HttpRequest) -> impl Responder {
+    let name = req.match_info().get("name").unwrap_or("Mundo");
+    format!("Hola {}!", &name)
 }
-
-#[post("/echo")]
-async fn echo(req_body: String) -> impl Responder {
-    HttpResponse::Ok().body(req_body)
-}
-
-#[post("/url/{value}")]
-async fn value64(info: web::Path<u64>) -> impl Responder {
-    let info = info.into_inner();
-    return if info.is_prime() {
-        HttpResponse::Ok().body(
-            "{id:\"1\",prime:\"true\"}"
-        )
-    } else {
-        HttpResponse::Ok().body(
-            "{id:\"1\",prime:\"false\"}"
-        )
-    };
-}
-
-#[post("/json")]
-async fn value_json(req: ) -> impl Responder {
-    let info = info.into_inner();
-    return if info.is_prime() {
-        HttpResponse::Ok().body(
-            "{id:\"1\",prime:\"true\"}"
-        )
-    } else {
-        HttpResponse::Ok().body(
-            "{id:\"1\",prime:\"false\"}"
-        )
-    };
-}
-
-
-async fn manual_hello() -> impl Responder {
-    HttpResponse::Ok().body("Hey there!")
-}
-
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| {
+    println!("Starting our server");
+    let thread_counter = Arc::new(AtomicU16::new(1));
+    HttpServer::new(move || {
+        println!("Starting Thread {}",
+                 thread_counter.fetch_add(1, Ordering::SeqCst));
+        let thread_index = thread_counter.load(Ordering::SeqCst);
         App::new()
-            .service(hello)
-            .service(echo)
-            .route("/hey", web::get().to(manual_hello))
+            .route("/", web::get().to(greet))
+            .route("/health",
+                   web::get().to(move ||
+                       HttpResponse::Ok()
+                           .header("thread-id", thread_index.to_string())
+                           .finish()
+                   ))
+            .route("/str", web::get().to(|| async { "Hola Rust\n" }))
+            .route("/{name}", web::get().to(greet))
     })
-        .bind("127.0.0.1:8080")?
+        .bind(("127.0.0.1", 3000))?
         .run()
         .await
 }

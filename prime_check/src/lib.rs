@@ -18,10 +18,10 @@ impl IsPrime for i64 {
 
 #[cfg(test)]
 mod tests {
+    use crate::IsPrime;
+    use rug::Integer;
     use std::cmp::Ordering;
     use std::ops::Mul;
-    use rug::Integer;
-    use crate::IsPrime;
 
     #[test]
     fn it_works() {

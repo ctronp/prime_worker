@@ -3,6 +3,12 @@ use std::sync::atomic::{AtomicU16, Ordering};
 use std::sync::Arc;
 use prime_check::IsPrime;
 
+const PRIME_OUTPUT: (&str, &str, &str) = (
+    "{is_prime: true}",
+    "{is_prime: false}",
+    "{is_prime: invalid}"
+);
+
 async fn greet(req: HttpRequest) -> impl Responder {
     let name = req.match_info().get("name").unwrap_or("Mundo");
     format!("Hola {}!", &name)
@@ -12,9 +18,9 @@ async fn prime_u64(req: HttpRequest) -> impl Responder {
     let name = req.match_info().get("value").unwrap_or("invalid");
     return match name.parse::<u64>() {
         Ok(n) => {
-            format!("{{is_prime: {:?}}}", n.is_prime())
+            if n.is_prime() { PRIME_OUTPUT.0 } else { PRIME_OUTPUT.1 }
         }
-        Err(_) => "{\"invalid\":true}".to_string()
+        Err(_) => PRIME_OUTPUT.2
     };
 }
 

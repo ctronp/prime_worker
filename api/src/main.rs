@@ -1,7 +1,6 @@
 use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer, Responder};
-use std::sync::atomic::{AtomicU16, Ordering};
-use std::sync::Arc;
 use prime_check::IsPrime;
+use rug::Integer;
 
 const PRIME_OUTPUT: (&str, &str, &str) = (
     "{is_prime: true}",
@@ -9,16 +8,23 @@ const PRIME_OUTPUT: (&str, &str, &str) = (
     "{is_prime: invalid}"
 );
 
-async fn greet(req: HttpRequest) -> impl Responder {
-    let name = req.match_info().get("name").unwrap_or("Mundo");
-    format!("Hola {}!", &name)
-}
-
 async fn prime_u64(req: HttpRequest) -> impl Responder {
-    let name = req.match_info().get("value").unwrap_or("invalid");
-    return match name.parse::<u64>() {
+    let str_value = req.match_info().get("value").unwrap_or("invalid");
+    return match str_value.parse::<u64>() {
         Ok(n) => {
             if n.is_prime() { PRIME_OUTPUT.0 } else { PRIME_OUTPUT.1 }
+        }
+        Err(_) => PRIME_OUTPUT.2
+    };
+}
+
+async fn prime_b10(req: HttpRequest) -> impl Responder {
+    let str_value = req.match_info().get("value").unwrap_or("invalid");
+    return match str_value.parse::<Integer>() {
+        Ok(n) => {
+            if n.is_probably_prime(50) != rug::integer::IsPrime::No {
+                PRIME_OUTPUT.0
+            } else { PRIME_OUTPUT.1 }
         }
         Err(_) => PRIME_OUTPUT.2
     };
@@ -27,26 +33,11 @@ async fn prime_u64(req: HttpRequest) -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     println!("Starting our server");
-    let thread_counter = Arc::new(AtomicU16::new(1));
     HttpServer::new(move || {
-        println!(
-            "Starting Thread {}",
-            thread_counter.fetch_add(1, Ordering::SeqCst)
-        );
-        let thread_index = thread_counter.load(Ordering::SeqCst);
         App::new()
-            .route("/", web::get().to(greet))
-            .route(
-                "/health",
-                web::get().to(move || {
-                    HttpResponse::Ok()
-                        .header("thread-id", thread_index.to_string())
-                        .finish()
-                }),
-            )
-            .route("/str", web::get().to(|| async { "Hola Rust\n" }))
-            .route("/{name}", web::get().to(greet))
+            .route("/", web::get().to(|| async { "Hello World\n" }))
             .route("/u64/{value}", web::get().to(prime_u64))
+            .route("/b10/{value}", web::get().to(prime_b10))
     })
         .bind(("127.0.0.1", 3000))?
         .run()

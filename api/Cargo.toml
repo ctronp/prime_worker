@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 actix-web = "^3.3.3"
 prime_check = { path = "../prime_check" }
+rug = "1.14.0"

@@ -33,7 +33,7 @@ async fn prime_b10(req: HttpRequest) -> impl Responder {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     println!("Starting our server");
-    HttpServer::new(move || {
+    HttpServer::new(|| {
         App::new()
             .route("/", web::get().to(|| async { "Hello World\n" }))
             .route("/u64/{value}", web::get().to(prime_u64))

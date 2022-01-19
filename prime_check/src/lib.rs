@@ -6,13 +6,13 @@ pub trait IsPrime {
 
 impl IsPrime for u64 {
     fn is_prime(&self) -> bool {
-        miller_rabin::is_prime(self, 50)
+        miller_rabin::is_prime(self, 51)
     }
 }
 
 impl IsPrime for i64 {
     fn is_prime(&self) -> bool {
-        miller_rabin::is_prime(&(*self as u64), 50)
+        miller_rabin::is_prime(&(*self as u64), 51)
     }
 }
 

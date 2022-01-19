@@ -1,45 +1,65 @@
-use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer, Responder};
+use lambda_runtime::{Context, Error, handler_fn};
+
 use prime_check::IsPrime;
 use rug::Integer;
+use serde::{Serialize, Deserialize};
 
-const PRIME_OUTPUT: (&str, &str, &str) = (
-    "{is_prime: true}",
-    "{is_prime: false}",
-    "{is_prime: invalid}"
-);
 
-async fn prime_u64(req: HttpRequest) -> impl Responder {
-    let str_value = req.match_info().get("value").unwrap_or("invalid");
-    return match str_value.parse::<u64>() {
-        Ok(n) => {
-            if n.is_prime() { PRIME_OUTPUT.0 } else { PRIME_OUTPUT.1 }
-        }
-        Err(_) => PRIME_OUTPUT.2
-    };
+#[derive(Serialize, Deserialize)]
+struct Output {
+    pub prime: char,
+    request_id: String,
 }
 
-async fn prime_b10(req: HttpRequest) -> impl Responder {
-    let str_value = req.match_info().get("value").unwrap_or("invalid");
-    return match str_value.parse::<Integer>() {
-        Ok(n) => {
-            if n.is_probably_prime(50) != rug::integer::IsPrime::No {
-                PRIME_OUTPUT.0
-            } else { PRIME_OUTPUT.1 }
+impl Output {
+    #[inline]
+    fn new(prime: char, request_id: String) -> Self {
+        Output {
+            prime,
+            request_id,
         }
-        Err(_) => PRIME_OUTPUT.2
-    };
+    }
 }
 
-#[actix_web::main]
-async fn main() -> std::io::Result<()> {
-    println!("Starting our server");
-    HttpServer::new(|| {
-        App::new()
-            .route("/", web::get().to(|| async { "Hello World\n" }))
-            .route("/u64/{value}", web::get().to(prime_u64))
-            .route("/b10/{value}", web::get().to(prime_b10))
-    })
-        .bind(("127.0.0.1", 3000))?
-        .run()
-        .await
+#[inline]
+fn prime_u64(str_value: String, request_id: String) -> Output {
+    match str_value.parse::<u64>() {
+        Ok(n) => {
+            match n.is_prime() {
+                true => Output::new('T', request_id),
+                false => Output::new('F', request_id)
+            }
+        }
+        Err(_) => Output::new('E', request_id)
+    }
+}
+
+#[inline]
+fn prime_b10(str_value: String, request_id: String) -> Output {
+    match str_value.parse::<Integer>() {
+        Ok(n) => {
+            match n.is_probably_prime(51) != rug::integer::IsPrime::No {
+                true => Output::new('Y', request_id),
+                false => Output::new('F', request_id)
+            }
+        }
+        Err(_) => Output::new('F', request_id)
+    }
+}
+
+#[tokio::main]
+async fn main() -> Result<(), lambda_runtime::Error> {
+    let func = handler_fn(handler);
+    lambda_runtime::run(func).await?;
+    Ok(())
+}
+
+async fn handler(event: String, context: Context) -> Result<Output, Error> {
+    if event.len() < 19 {
+        Ok(prime_u64(event, context.request_id))
+    } else if event.len() < 2001 {
+        Ok(prime_b10(event, context.request_id))
+    } else {
+        Ok(Output::new('E', context.request_id))
+    }
 }

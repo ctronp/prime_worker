@@ -1,6 +1,5 @@
 use lambda_runtime::{Context, Error, handler_fn};
 
-use prime_check::IsPrime;
 use rug::Integer;
 use serde::{Serialize, Deserialize};
 

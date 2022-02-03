@@ -1,5 +1,9 @@
 #!/usr/bin/bash
 
+set -e
+
 cd "$(dirname "$0")" || exit
-cross build --release  --target aarch64-unknown-linux-gnu
+cargo build --release --target x86_64-unknown-linux-musl
 cp target/release/api bootstrap
+zip bootstrap.zip bootstrap
+rm bootstrap

@@ -18,18 +18,6 @@ impl Output {
     }
 }
 
-// #[inline]
-// fn prime_u64(str_value: String) -> Output {
-//     match str_value.parse::<u64>() {
-//         Ok(n) => {
-//             match n.is_prime() {
-//                 true => Output::new('T'),
-//                 false => Output::new('F')
-//             }
-//         }
-//         Err(_) => Output::new('E')
-//     }
-// }
 
 /// Return Output with char {Y, N, P} if is prime, is not, or probably
 #[inline]

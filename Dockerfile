@@ -7,8 +7,7 @@ WORKDIR /app
 COPY . .
 RUN cargo build --release
 
-
-FROM gcr.io/distroless/cc:latest AS DEPLOY
+FROM gcr.io/distroless/cc
 
 COPY --from=build-env /app/target/release/api /
 

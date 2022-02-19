@@ -1,3 +1,7 @@
-/target
+.git
+.github
 .idea
 .vscode
+/target
+.dockerignore
+.gitignore

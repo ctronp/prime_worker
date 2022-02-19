@@ -1,5 +1,3 @@
-use lambda_runtime::{Context, Error, handler_fn};
-
 use rug::Integer;
 use serde::{Serialize, Deserialize};
 

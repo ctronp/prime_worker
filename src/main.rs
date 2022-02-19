@@ -43,21 +43,20 @@ fn main() {
     match env::var("PORT") {
         Ok(p) => {
             match p.parse::<u16>() {
-                Ok(n) => {port = n;},
-                Err(_e) => {},
+                Ok(n) => { port = n; }
+                Err(_e) => {}
             };
         }
-        Err(_e) => {},
+        Err(_e) => {}
     };
     let addr = ([0, 0, 0, 0], port).into();
 
     let new_service = || {
         service_fn_ok(|_| {
-
             let mut hello = "Hello ".to_string();
             match env::var("TARGET") {
-                Ok(target) => {hello.push_str(&target);},
-                Err(_e) => {hello.push_str("World")},
+                Ok(target) => { hello.push_str(&target); }
+                Err(_e) => { hello.push_str("World") }
             };
 
             Response::new(Body::from(hello))

@@ -1,15 +1,15 @@
 ARG PORT=8080
 
-FROM docker.io/rust:latest AS build-env
+FROM docker.io/rust:latest AS build
 
 WORKDIR /app
 
 COPY . .
 RUN cargo build --release
 
-FROM gcr.io/distroless/cc
+FROM gcr.io/distroless/cc:latest
 
-COPY --from=build-env /app/target/release/api /
+COPY --from=build /app/target/release/api /
 
 ARG PORT
 ENV PORT $PORT

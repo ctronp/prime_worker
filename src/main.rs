@@ -1,43 +1,38 @@
+#![allow(unused_imports)] // Delete in the future
+#![allow(dead_code)] // Delete in the future
+
+mod entities;
+mod services;
+mod database;
+mod controller;
+
+use entities::{Input, Output};
+
 use rug::Integer;
 use serde::{Serialize, Deserialize};
-use hyper::{Body, Response, Server};
-use hyper::service::service_fn_ok;
-use hyper::rt::{self, Future};
 use std::env;
+use std::process::exit;
+use std::time::Duration;
+use tokio::sync::mpsc::channel;
 
+use actix_web::{get, web, App, HttpServer, Responder, HttpResponse};
+use actix_web::cookie::time::Time;
+use tokio::join;
+use tokio::signal::unix::{signal, SignalKind};
+use tokio::time::sleep;
 
-#[derive(Serialize, Deserialize)]
-struct Output {
-    pub prime: char,
+async fn exit_handler() -> Result<(), Box<dyn std::error::Error>> {
+    let mut stream = signal(SignalKind::interrupt())?;
+    stream.recv().await;
+    println!("Shutting Down in 20 sec");
+    sleep(Duration::from_secs(20)).await;
+    exit(1)
 }
 
-impl Output {
-    #[inline]
-    fn new(prime: char) -> Self {
-        Output {
-            prime,
-        }
-    }
-}
+#[actix_web::main]
+async fn main() -> std::io::Result<()> {
+    let exit_h = exit_handler();
 
-
-/// Return Output with char {Y, N, P} if is prime, is not, or probably
-#[inline]
-fn prime_b10(str_value: String) -> Output {
-    match str_value.parse::<Integer>() {
-        Ok(n) => {
-            match n.is_probably_prime(51) {
-                rug::integer::IsPrime::Yes => Output::new('Y'),
-                rug::integer::IsPrime::Probably => Output::new('P'),
-                rug::integer::IsPrime::No => Output::new('N')
-            }
-        }
-        Err(_) => Output::new('E')
-    }
-}
-
-fn main() {
-    pretty_env_logger::init();
 
     let mut port: u16 = 8080;
     match env::var("PORT") {
@@ -49,33 +44,13 @@ fn main() {
         }
         Err(_e) => {}
     };
-    let addr = ([0, 0, 0, 0], port).into();
 
-    let new_service = || {
-        service_fn_ok(|_| {
-            let mut hello = "Hello ".to_string();
-            match env::var("TARGET") {
-                Ok(target) => { hello.push_str(&target); }
-                Err(_e) => { hello.push_str("World") }
-            };
+    let to_return = HttpServer::new(||
+        App::new()
+    )
+        .bind(("0.0.0.0", port))?
+        .workers(1)
+        .run();
 
-            Response::new(Body::from(hello))
-        })
-    };
-
-    let server = Server::bind(&addr)
-        .serve(new_service)
-        .map_err(|e| eprintln!("server error: {}", e));
-
-    println!("Listening on http://{}", addr);
-
-    rt::run(server);
-}
-
-async fn handler(event: String) -> Result<Output, &'static str> {
-    if event.len() < 2001 {
-        Ok(prime_b10(event))
-    } else {
-        Ok(Output::new('E'))
-    }
+    join!(to_return, exit_h).0
 }

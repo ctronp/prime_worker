@@ -7,15 +7,19 @@ publish = false
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-hyper = "0.12.x"
+actix-web = "4.0.0-rc"
 serde = {version = "1.x", features = ["derive"]}
 serde_json = "1.x"
 rug = "1.x"
-pretty_env_logger = "0.2.3" # DELETE SOON
+tokio = { version = "1.17.x", features = ["full"] }
 
 [profile.release]
-incremental = true
+incremental = false
 debug = 0
 lto = true
 codegen-units = 1
 
+[profile.dev]
+opt-level = 1
+debug = true
+incremental = true

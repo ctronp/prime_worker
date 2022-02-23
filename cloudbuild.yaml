@@ -1,41 +1,6 @@
 timeout: 1200s
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    id: 'Build'
-    args: ["build", "-t", "$_IMAGE_NAME:$_IMAGE_VERSION", ".", "-f", "$_DOCKERFILE_PATH"]
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/workerV1', '.']
   - name: 'gcr.io/cloud-builders/docker'
-    id: 'Push'
-    args: ["push", "$_IMAGE_NAME:$_IMAGE_VERSION"]
-  - name: 'gcr.io/cloud-builders/gke-deploy'
-    id: 'Prepare deploy'
-    args:
-      - 'prepare'
-      - '--image=$_IMAGE_NAME:$_IMAGE_VERSION'
-      - '--expose=80'
-      - '--app=$_K8S_APP_NAME'
-      - '--version=$_IMAGE_VERSION'
-      - '--namespace=$_K8S_NAMESPACE'
-      - '--output=$_OUTPUT_PATH'
-      - '--annotation=gcb-build-id=$BUILD_ID'
-  - name: 'gcr.io/cloud-builders/gke-deploy'
-    id: 'Apply deploy'
-    args:
-      - 'apply'
-      - '--filename=$_OUTPUT_PATH/expanded/*'
-      - '--namespace=$_K8S_NAMESPACE'
-      - '--cluster=$_GKE_CLUSTER'
-      - '--location=$_GKE_LOCATION'
-images:
-  - '$_IMAGE_NAME:$_IMAGE_VERSION'
-substitutions:
-  _DOCKERFILE_PATH: Dockerfile
-  _IMAGE_NAME: PRIME_WORKER
-  _IMAGE_VERSION: latest
-  _GKE_CLUSTER:
-  _GKE_LOCATION: us-central1
-  _K8S_APP_NAME: PRIMES
-  _K8S_NAMESPACE:
-  _OUTPUT_PATH:
-options:
-  substitution_option: 'ALLOW_LOOSE'
-tags: ['$_K8S_APP_NAME']
+    args: ['push', 'gcr.io/$PROJECT_ID/workerV1']

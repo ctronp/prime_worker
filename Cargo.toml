@@ -8,10 +8,13 @@ publish = false
 
 [dependencies]
 actix-web = "4.0.0-rc"
-serde = {version = "1.x", features = ["derive"]}
-serde_json = "1.x"
-rug = "1.x"
-tokio = { version = "1.17.x", features = ["full"] }
+rug = "1"
+tokio = { version = "1.17", features = ["full"] }
+rayon = "1.5"
+serde = {version = "1", features = ["derive"]}
+serde_json = "1"
+once_cell = "1.9"
+#crossbeam = "0.8"
 
 [profile.release]
 incremental = false

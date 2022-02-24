@@ -1,15 +1,42 @@
-pub struct DatabaseQ {}
+#[allow(unused_imports)] // Delete in the future
+#[allow(dead_code)] // Delete in the future
 
-// impl DatabaseQ {
-//     pub fn new(value: &str) -> Self {
-//         DatabaseQ {}
-//     }
-//
-//     pub fn answer_db(query: &mut DatabaseQ) -> Option<String> {
-//         None
-//     }
-// }
+use tokio::sync::mpsc;
 
-pub async fn answer_db<>(_value: &str) -> Option<String> {
+pub struct DatabaseQ {
+    // value: String
+    // sender: mpsc:Sender<String>
+}
+
+
+
+// static mut db_query : mpsc::Sender<DatabaseQ>;
+
+
+
+pub enum DbAction {
+    Query = 0isize,
+    Upload,
+    Exist,
+}
+
+struct DbQuery {
+    id: usize,
+    value: String,
+}
+
+
+#[inline]
+fn db_manage() {}
+
+#[inline]
+fn init_db() -> DatabaseQ {
+    std::thread::spawn(db_manage);
+
+    DatabaseQ {}
+}
+
+#[inline]
+pub fn answer_db(_value: &str) -> Option<String> {
     None
 }

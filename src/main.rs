@@ -5,8 +5,7 @@ mod entities;
 mod services;
 mod database;
 mod controller;
-
-use entities::{Input, Output};
+mod statics;
 
 use rug::Integer;
 use serde::{Serialize, Deserialize};
@@ -32,25 +31,19 @@ async fn exit_handler() -> Result<(), Box<dyn std::error::Error>> {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let exit_h = exit_handler();
+    statics::init_static();
 
-
-    let mut port: u16 = 8080;
-    match env::var("PORT") {
-        Ok(p) => {
-            match p.parse::<u16>() {
-                Ok(n) => { port = n; }
-                Err(_e) => {}
-            };
-        }
-        Err(_e) => {}
-    };
-
-    let to_return = HttpServer::new(||
+    println!("Initializing Server");
+    let to_return = HttpServer::new(|| {
         App::new()
+            .route("/primes", web::get().to(controller::primes_handler))
+    }
     )
-        .bind(("0.0.0.0", port))?
+        .bind(("0.0.0.0", statics::get_port_usize()))?
         .workers(1)
         .run();
+
+    println!("Server initialized");
 
     join!(to_return, exit_h).0
 }

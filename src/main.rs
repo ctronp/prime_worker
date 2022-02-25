@@ -40,7 +40,7 @@ fn main() -> std::io::Result<()> {
 
     actix_web::rt::System::with_tokio_rt(||
         tokio::runtime::Builder::new_multi_thread()
-            .worker_threads(1) // Tokio Worker
+            .worker_threads((v_cpus as f64).cbrt() as usize) // Tokio Worker
             .max_blocking_threads((v_cpus as f64).sqrt() as usize + 1) // Tokio Blocking Thread Worker
             .enable_all()
             .build()
@@ -57,7 +57,7 @@ fn main() -> std::io::Result<()> {
             }
             )
                 .bind(("0.0.0.0", statics::get_port_usize()))?
-                .workers(1) // Actix Worker
+                .workers((v_cpus as f64).cbrt() as usize) // Actix Worker
                 .run();
 
             println!("Server initialized");

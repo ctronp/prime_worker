@@ -36,7 +36,7 @@ async fn main() -> std::io::Result<()> {
     println!("Initializing Server");
     let to_return = HttpServer::new(|| {
         App::new()
-            .route("/primes", web::get().to(controller::primes_handler))
+            .route("/primes", web::post().to(controller::primes_handler))
     }
     )
         .bind(("0.0.0.0", statics::get_port_usize()))?

@@ -1,7 +1,7 @@
 .git
 .github
+LoadTesting.Test
 .idea
-.vscode
 target
 .dockerignore
 .gitignore

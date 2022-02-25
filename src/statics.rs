@@ -1,9 +1,6 @@
-use std::env::VarError;
-use once_cell::sync::Lazy;
-
 static mut PORT_STR: &str = "8080";
 static mut PORT_USIZE: u16 = 8080;
-pub static MAX_PAYLOAD: usize = 262_144;
+// pub static MAX_PAYLOAD: usize = 262_144;
 
 #[inline]
 pub fn init_static() {
@@ -13,7 +10,7 @@ pub fn init_static() {
         if !INIT {
             println!("Initializing Values");
             match std::env::var("PORT") {
-                Ok(value) => { if value != "" { PORT = value } }
+                Ok(value) => { if !value.is_empty() { PORT = value } }
                 Err(_) => { PORT = PORT_STR.to_string() }
             }
 
@@ -24,10 +21,10 @@ pub fn init_static() {
     }
 }
 
-#[inline]
-pub fn get_port_str() -> &'static str {
-    unsafe { PORT_STR }
-}
+// #[inline]
+// pub fn get_port_str() -> &'static str {
+//     unsafe { PORT_STR }
+// }
 
 #[inline]
 pub fn get_port_usize() -> u16 {

@@ -131,9 +131,9 @@ dependencies = [
 
 [[package]]
 name = "actix-web"
-version = "4.0.0"
+version = "4.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f964d10ff25de21fa119d198384cf8f5320022fbdf92f6adbfb260fca649d0ec"
+checksum = "f4e5ebffd51d50df56a3ae0de0e59487340ca456f05dd0b90c0a7a6dd6a74d31"
 dependencies = [
  "actix-codec",
  "actix-http",
@@ -227,6 +227,7 @@ name = "api"
 version = "0.1.0"
 dependencies = [
  "actix-web",
+ "num_cpus",
  "once_cell",
  "rayon",
  "rug",

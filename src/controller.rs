@@ -1,11 +1,19 @@
-use std::ops::{Deref, DerefMut};
-use actix_web::{Error, FromRequest, HttpMessage, HttpRequest, HttpResponse, Responder, web};
-use actix_web::web::Payload;
+use std::ops::{DerefMut};
+use actix_web::{HttpResponse, Responder, web};
+
 use crate::entities;
 use crate::services::process_numbers;
 
 pub async fn primes_handler(mut input: web::Json<entities::Input>) -> impl Responder {
-    let output = process_numbers(input.values.deref_mut());
+    let output = match tokio::task::spawn_blocking(move || {
+        process_numbers(input.values.deref_mut())
+    }).await {
+        Ok(output) => { output }
+        Err(_) => {
+            return HttpResponse::InternalServerError().body(
+                r##"{"Error":"Internal Server Error"}"##);
+        }
+    };
 
     match serde_json::to_string(&output) {
         Ok(body) => { HttpResponse::Ok().body(body) }

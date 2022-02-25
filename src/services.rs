@@ -1,13 +1,11 @@
-use std::collections::HashMap;
 use rug::Integer;
-use tokio::join;
 use rayon::prelude::*;
 use crate::database::answer_db;
-use crate::entities::{Input, Output};
+use crate::entities::{Output};
 
 // Return Output with char {Y, N, P} if is prime, is not, or probably
 #[inline]
-fn prime_b10(str_value: &String) -> String {
+fn prime_b10(str_value: &str) -> String {
     match str_value.parse::<Integer>() {
         Ok(n) => {
             match n.is_probably_prime(51) {
@@ -25,11 +23,11 @@ fn prime_b10(str_value: &String) -> String {
 fn process_value(value: &mut String) -> (String, String) {
     let val_ref = &value[..];
     (value.to_string(),
-            if let Some(query) = answer_db(val_ref) {
-                query
-            } else {
-                prime_b10(value)
-            }
+     if let Some(query) = answer_db(val_ref) {
+         query
+     } else {
+         prime_b10(value)
+     }
     )
 }
 

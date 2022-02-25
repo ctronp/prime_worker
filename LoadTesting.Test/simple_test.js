@@ -4,7 +4,7 @@ import {sleep} from 'k6';
 export let options = {
     insecureSkipTLSVerify: true,
     noConnectionReuse: false,
-    vus: 6,
+    vus: 3, // proportional to actix-web workers
     duration: '60s'
 }
 
@@ -24,5 +24,4 @@ export default () => {
     }
 
     http.post(url, payload, params)
-    sleep(0.5)
 }

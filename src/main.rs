@@ -24,7 +24,14 @@ async fn exit_handler() -> Result<(), Box<dyn std::error::Error>> {
 fn main() -> std::io::Result<()> {
     let v_cpus = num_cpus::get();
     let p_cpus = num_cpus::get_physical();
-    // let smt = v_cpus != p_cpus;
+    let smt = v_cpus != p_cpus;
+
+    if smt {
+        println!("smt (hyper-threading) enabled")
+    } else {
+        println!("smt (hyper-threading) disabled")
+    }
+
 
     rayon::ThreadPoolBuilder::new()
         .num_threads(v_cpus) // Rayon Worker
@@ -34,7 +41,7 @@ fn main() -> std::io::Result<()> {
     actix_web::rt::System::with_tokio_rt(||
         tokio::runtime::Builder::new_multi_thread()
             .worker_threads(1) // Tokio Worker
-            .max_blocking_threads(2) // Tokio Blocking Thread Worker
+            .max_blocking_threads((v_cpus as f64).sqrt() as usize + 1) // Tokio Blocking Thread Worker
             .enable_all()
             .build()
             .unwrap()

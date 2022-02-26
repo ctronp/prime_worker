@@ -36,7 +36,7 @@ fn main() -> std::io::Result<()> {
 
     // Log to stdout
     let mut log_builder = env_logger::Builder::from_default_env();
-    log_builder.target(env_logger::Target::Stdout).init();
+    log_builder.target(env_logger::Target::Stderr).init();
 
 
     rayon::ThreadPoolBuilder::new()

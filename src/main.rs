@@ -34,6 +34,10 @@ fn main() -> std::io::Result<()> {
         println!("smt (hyper-threading) disabled")
     }
 
+    // Log to stdout
+    let mut log_builder = env_logger::Builder::from_default_env();
+    log_builder.target(env_logger::Target::Stdout).init();
+
 
     rayon::ThreadPoolBuilder::new()
         .num_threads(cpus) // Rayon Worker
@@ -42,7 +46,7 @@ fn main() -> std::io::Result<()> {
 
     actix_web::rt::System::with_tokio_rt(||
         tokio::runtime::Builder::new_multi_thread()
-            .worker_threads((cpus as f64).cbrt() as usize) // Tokio Worker
+            .worker_threads((cpus as f64).cbrt() as usize + 1) // Tokio Worker
             .max_blocking_threads((cpus as f64).sqrt() as usize + 1) // Tokio Blocking Thread Worker
             .enable_all()
             .build()
@@ -56,7 +60,6 @@ fn main() -> std::io::Result<()> {
             let to_return = HttpServer::new(|| {
                 App::new()
                     .wrap(Logger::default())
-
                     .route("/primes", web::post().to(controller::primes_handler))
             }
             )

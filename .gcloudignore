@@ -1,0 +1,7 @@
+.git
+.github
+LoadTesting.Test
+.idea
+target
+.dockerignore
+.gitignore

@@ -7,6 +7,7 @@ mod statics;
 
 use std::time::Duration;
 use actix_web::{web, App, HttpServer};
+use actix_web::middleware::Logger;
 
 use tokio::join;
 use tokio::signal::unix::{signal, SignalKind};
@@ -25,6 +26,7 @@ fn main() -> std::io::Result<()> {
     let v_cpus = num_cpus::get();
     let p_cpus = num_cpus::get_physical();
     let smt = v_cpus != p_cpus;
+    let cpus = v_cpus;
 
     if smt {
         println!("smt (hyper-threading) enabled")
@@ -34,14 +36,14 @@ fn main() -> std::io::Result<()> {
 
 
     rayon::ThreadPoolBuilder::new()
-        .num_threads(v_cpus) // Rayon Worker
+        .num_threads(cpus) // Rayon Worker
         .build_global()
         .unwrap();
 
     actix_web::rt::System::with_tokio_rt(||
         tokio::runtime::Builder::new_multi_thread()
-            .worker_threads((v_cpus as f64).cbrt() as usize) // Tokio Worker
-            .max_blocking_threads((v_cpus as f64).sqrt() as usize + 1) // Tokio Blocking Thread Worker
+            .worker_threads((cpus as f64).cbrt() as usize) // Tokio Worker
+            .max_blocking_threads((cpus as f64).sqrt() as usize + 1) // Tokio Blocking Thread Worker
             .enable_all()
             .build()
             .unwrap()
@@ -53,11 +55,13 @@ fn main() -> std::io::Result<()> {
             println!("Initializing Server");
             let to_return = HttpServer::new(|| {
                 App::new()
+                    .wrap(Logger::default())
+
                     .route("/primes", web::post().to(controller::primes_handler))
             }
             )
                 .bind(("0.0.0.0", statics::get_port_usize()))?
-                .workers((v_cpus as f64).cbrt() as usize) // Actix Worker
+                .workers((cpus as f64).cbrt() as usize) // Actix Worker
                 .run();
 
             println!("Server initialized");

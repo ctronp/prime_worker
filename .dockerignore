@@ -1,6 +1,6 @@
 .git
 .github
-LoadTesting.Test
+LoadTesting
 .idea
 target
 .dockerignore

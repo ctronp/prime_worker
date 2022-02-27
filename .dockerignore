@@ -1,7 +1,10 @@
 .git
 .github
+kubernetes
 LoadTesting
 .idea
 target
 .dockerignore
+.gcloudignore
 .gitignore
+cloudbuild.yaml

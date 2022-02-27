@@ -1,5 +1,6 @@
 .git
 .github
+kubernetes
 LoadTesting
 .idea
 target

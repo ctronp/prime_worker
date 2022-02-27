@@ -22,6 +22,7 @@ steps:
             '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest',
             '--cache-from',
             '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest',
+            '--build-arg BUILDKIT_INLINE_CACHE=1',
             '.' ]
   # Push Image with all tags
   - name: 'gcr.io/cloud-builders/docker'

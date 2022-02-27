@@ -4,14 +4,14 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [ '-c',
-            'docker pull
+      'docker pull
               ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
               || exit 0' ]
   # push latest rust and distroless images
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [ '-c',
-            'docker pull docker.io/rust:latest && 
+      'docker pull docker.io/rust:latest && 
               docker pull gcr.io/distroless/static:latest' ]
   # Build Output image
   - name: 'gcr.io/cloud-builders/docker'
@@ -23,10 +23,12 @@ steps:
             '--cache-from',
             '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest',
             '.' ]
-  # Push Image
+  # Push Image with all tags
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'push',
-            '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}',
+            '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push',
             '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest' ]
 images:
   - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}'

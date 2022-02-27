@@ -13,7 +13,7 @@ RUN cargo fetch
 COPY . .
 RUN cargo build --release
 
-FROM gcr.io/distroless/cc:latest
+FROM gcr.io/distroless/static:latest
 
 COPY --from=build /app/target/release/api /
 

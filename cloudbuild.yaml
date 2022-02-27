@@ -7,6 +7,10 @@ steps:
             '-t',
             '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest',
             '.' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push',
+            '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}',
+            '--all-tags' ]
 images:
   - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}'
   - '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest'

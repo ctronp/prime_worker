@@ -1,15 +1,18 @@
 timeout: 1800s
 steps:
+  # download last builded image to cache
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [ '-c',
-      'docker pull
-            ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
-             || exit 0' ]
+            'docker pull
+              ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
+              || exit 0' ]
+  #
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [ '-c',
-            'docker pull docker.io/rust:latest gcr.io/distroless/static:latest' ]
+            'docker pull docker.io/rust:latest && 
+              docker pull gcr.io/distroless/static:latest' ]
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'push',
             '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}',

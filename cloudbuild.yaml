@@ -5,7 +5,12 @@ steps:
     args: [ '-c',
       'docker pull
             ${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
-             || exit 0' ]
+             || exit 0',
+      'docker pull docker.io/rust:latest gcr.io/distroless/static:latest' ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [ 'push',
+            '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}',
+            '--all-tags' ]
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'build',
             '-t',

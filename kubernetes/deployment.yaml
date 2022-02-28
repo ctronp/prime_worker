@@ -16,9 +16,11 @@ spec:
     spec:
       containers:
         - name: worker
-          image: '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest'
+          image: 'us-central1-docker.pkg.dev/primesnumbers/primes-numbers/prime_container:latest'
           env:
             - name: PORT
               value: "8080"
+            - name: MAX_VALUE_LEN
+              value: "2000"
           ports:
             - containerPort: 8080

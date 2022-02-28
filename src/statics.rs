@@ -31,7 +31,7 @@ pub fn init_static() {
         println!("\nVariables:\
         \n  -PORT: {:?}\
         \n  -MAX_VALUE_LEN: {:?}",
-                 get_port_usize(),
+                 get_port_u16(),
                  get_max_value_usize()
         )
     }
@@ -43,7 +43,7 @@ pub fn init_static() {
 // }
 
 #[inline]
-pub fn get_port_usize() -> u16 {
+pub fn get_port_u16() -> u16 {
     unsafe { PORT_U16 }
 }
 

@@ -65,7 +65,7 @@ fn main() -> std::io::Result<()> {
                     .route("/primes", web::post().to(controller::primes_handler))
             }
             )
-                .bind(("0.0.0.0", statics::get_port_usize()))?
+                .bind(("0.0.0.0", statics::get_port_u16()))?
                 .workers((cpus as f64).cbrt() as usize) // Actix Worker
                 .run();
 

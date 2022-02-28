@@ -14,28 +14,37 @@ pub async fn init_static() {
         unsafe {
             println!("Initializing Values");
             match std::env::var("PORT") {
-                Ok(value) => { if !value.is_empty() { PORT = value } }
-                Err(_) => { PORT = PORT_STR.to_string() }
+                Ok(value) => {
+                    if !value.is_empty() {
+                        PORT = value
+                    }
+                }
+                Err(_) => PORT = PORT_STR.to_string(),
             }
             match std::env::var("MAX_VALUE_LEN") {
-                Ok(value) => { if !value.is_empty() { MAX_VALUE_LEN = value } }
-                Err(_) => { MAX_VALUE_LEN = MAX_VALUE_LEN_USIZE.to_string() }
+                Ok(value) => {
+                    if !value.is_empty() {
+                        MAX_VALUE_LEN = value
+                    }
+                }
+                Err(_) => MAX_VALUE_LEN = MAX_VALUE_LEN_USIZE.to_string(),
             }
-
 
             PORT_STR = &PORT[..];
             PORT_U16 = PORT.parse().unwrap();
         }
         if cfg!(debug_assertions) {
             println!("Debug mode on");
-            println!("\nVariables:\
+            println!(
+                "\nVariables:\
         \n  -PORT: {:?}\
         \n  -MAX_VALUE_LEN: {:?}",
-                     get_port_u16(),
-                     get_max_value_usize()
+                get_port_u16(),
+                get_max_value_usize()
             )
         }
-    }).await;
+    })
+    .await;
 }
 
 // #[inline]
@@ -49,4 +58,6 @@ pub fn get_port_u16() -> u16 {
 }
 
 #[inline]
-pub fn get_max_value_usize() -> usize { unsafe { MAX_VALUE_LEN_USIZE } }
+pub fn get_max_value_usize() -> usize {
+    unsafe { MAX_VALUE_LEN_USIZE }
+}

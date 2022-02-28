@@ -5,7 +5,7 @@ metadata:
   labels:
     app: workerV1
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: workerV1
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: worker
-          image: gcr.io/$PROJECT_ID/worker
+          image: '${_LOCATION}-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest'
           env:
             - name: PORT
               value: "8080"

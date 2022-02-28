@@ -3,9 +3,7 @@
 //     // sender: mpsc:Sender<String>
 // }
 
-
 // static mut db_query : mpsc::Sender<DatabaseQ>;
-
 
 // pub enum DbAction {
 //     Query = 0isize,
@@ -17,7 +15,6 @@
 //     id: usize,
 //     value: String,
 // }
-
 
 // #[inline]
 // fn db_manage() {}

@@ -1,14 +1,13 @@
+mod controller;
+mod database;
 mod entities;
 mod services;
-mod database;
-mod controller;
 mod statics;
 mod test;
 
-
-use std::time::Duration;
-use actix_web::{web, App, HttpServer};
 use actix_web::middleware::Logger;
+use actix_web::{web, App, HttpServer};
+use std::time::Duration;
 
 use tokio::join;
 use tokio::signal::unix::{signal, SignalKind};
@@ -39,39 +38,36 @@ fn main() -> std::io::Result<()> {
     let mut log_builder = env_logger::Builder::from_default_env();
     log_builder.target(env_logger::Target::Stderr).init();
 
-
     rayon::ThreadPoolBuilder::new()
         .num_threads(cpus) // Rayon Worker
         .build_global()
         .unwrap();
 
-    actix_web::rt::System::with_tokio_rt(||
+    actix_web::rt::System::with_tokio_rt(|| {
         tokio::runtime::Builder::new_multi_thread()
             .worker_threads((cpus as f64).cbrt() as usize + 1) // Tokio Worker
             .max_blocking_threads((cpus as f64).sqrt() as usize + 1) // Tokio Blocking Thread Worker
             .enable_all()
             .build()
             .unwrap()
-    )
-        .block_on(async move {
-            let exit_h = exit_handler();
-            statics::init_static().await;
+    })
+    .block_on(async move {
+        let exit_h = exit_handler();
+        statics::init_static().await;
 
-            println!("Initializing Server");
-            let to_return = HttpServer::new(|| {
-                App::new()
-                    .wrap(Logger::default())
-                    .route("/", web::get().to(|| async { "/" }))
-                    .route("/primes", web::post().to(controller::primes_handler))
-            }
-            )
-                .bind(("0.0.0.0", statics::get_port_u16()))?
-                .workers((cpus as f64).cbrt() as usize) // Actix Worker
-                .run();
-
-            println!("Server initialized");
-
-
-            join!(to_return, exit_h).0
+        println!("Initializing Server");
+        let to_return = HttpServer::new(|| {
+            App::new()
+                .wrap(Logger::default())
+                .route("/", web::get().to(|| async { "/" }))
+                .route("/primes", web::post().to(controller::primes_handler))
         })
+        .bind(("0.0.0.0", statics::get_port_u16()))?
+        .workers((cpus as f64).cbrt() as usize) // Actix Worker
+        .run();
+
+        println!("Server initialized");
+
+        join!(to_return, exit_h).0
+    })
 }

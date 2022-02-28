@@ -1,6 +1,6 @@
 timeout: 1800s
 steps:
-  # download last builded image to cache
+  # download last built image to cache
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [ '-c',
@@ -12,7 +12,7 @@ steps:
     entrypoint: 'bash'
     args: [ '-c',
       'docker pull docker.io/rust:latest && 
-              docker pull gcr.io/distroless/static:latest' ]
+              docker pull gcr.io/distroless/cc:latest' ]
   # Build Output image
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'build',

@@ -16,7 +16,7 @@ RUN cargo build
 
 FROM gcr.io/distroless/cc:latest
 
-COPY --from=build /app/target/release/api /
+COPY --from=build /app/target/debug/api /
 
 ARG MAX_VALUE_LEN
 ENV MAX_VALUE_LEN $MAX_VALUE_LEN

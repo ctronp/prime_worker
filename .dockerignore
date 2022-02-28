@@ -9,3 +9,4 @@ target
 .gitignore
 cloudbuild.yaml
 debug.Dockerfile
+Dockerfile

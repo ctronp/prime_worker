@@ -1,4 +1,5 @@
 ARG PORT=8080
+ARG MAX_VALUE_LEN=2000
 
 FROM docker.io/rust:latest AS build
 
@@ -16,6 +17,9 @@ RUN cargo build --release
 FROM gcr.io/distroless/cc:latest
 
 COPY --from=build /app/target/release/api /
+
+ARG MAX_VALUE_LEN
+ENV MAX_VALUE_LEN $MAX_VALUE_LEN
 
 ARG PORT
 ENV PORT $PORT

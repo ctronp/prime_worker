@@ -3,12 +3,12 @@ use std::collections::HashMap;
 
 #[derive(Serialize, Deserialize)]
 pub struct Input {
-    pub values: Vec<String>
+    pub values: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize)]
 pub struct Output {
-    pub values: HashMap<String, String>
+    pub values: HashMap<String, String>,
 }
 
 // impl Output {

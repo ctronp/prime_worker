@@ -60,6 +60,7 @@ fn main() -> std::io::Result<()> {
             let to_return = HttpServer::new(|| {
                 App::new()
                     .wrap(Logger::default())
+                    .route("/", web::get().to(|| async { "/" }))
                     .route("/primes", web::post().to(controller::primes_handler))
             }
             )

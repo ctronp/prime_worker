@@ -55,7 +55,7 @@ fn main() -> std::io::Result<()> {
     )
         .block_on(async move {
             let exit_h = exit_handler();
-            statics::init_static();
+            statics::init_static().await;
 
             println!("Initializing Server");
             let to_return = HttpServer::new(|| {

@@ -1,15 +1,17 @@
+use tokio::sync::OnceCell;
+
 static mut PORT_STR: &str = "8080";
 static mut PORT_U16: u16 = 8080;
 static mut MAX_VALUE_LEN_USIZE: usize = 2000;
 // pub static MAX_PAYLOAD: usize = 262_144;
 
-pub fn init_static() {
-    static mut INIT: bool = false;
+pub async fn init_static() {
+    static INIT: OnceCell<()> = OnceCell::const_new();
     static mut PORT: String = String::new();
     static mut MAX_VALUE_LEN: String = String::new();
 
-    unsafe {
-        if !INIT {
+    INIT.get_or_init(|| async {
+        unsafe {
             println!("Initializing Values");
             match std::env::var("PORT") {
                 Ok(value) => { if !value.is_empty() { PORT = value } }
@@ -22,19 +24,18 @@ pub fn init_static() {
 
 
             PORT_STR = &PORT[..];
-            PORT_U16 = PORT.parse().unwrap()
+            PORT_U16 = PORT.parse().unwrap();
         }
-    }
-
-    if cfg!(debug_assertions) {
-        println!("Debug mode on");
-        println!("\nVariables:\
+        if cfg!(debug_assertions) {
+            println!("Debug mode on");
+            println!("\nVariables:\
         \n  -PORT: {:?}\
         \n  -MAX_VALUE_LEN: {:?}",
-                 get_port_u16(),
-                 get_max_value_usize()
-        )
-    }
+                     get_port_u16(),
+                     get_max_value_usize()
+            )
+        }
+    }).await;
 }
 
 // #[inline]

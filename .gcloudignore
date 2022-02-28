@@ -6,3 +6,4 @@ LoadTesting
 target
 .dockerignore
 .gitignore
+debug.Dockerfile

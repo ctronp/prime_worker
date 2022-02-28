@@ -12,4 +12,4 @@ RUN cargo fetch
 
 # COMPILATION
 COPY . .
-RUN cargo test
+CMD ['cargo', 'test']

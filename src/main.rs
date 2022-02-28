@@ -3,6 +3,7 @@ mod services;
 mod database;
 mod controller;
 mod statics;
+mod test;
 
 
 use std::time::Duration;

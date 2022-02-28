@@ -1,5 +1,5 @@
 static mut PORT_STR: &str = "8080";
-static mut PORT_USIZE: u16 = 8080;
+static mut PORT_U16: u16 = 8080;
 static mut MAX_VALUE_LEN_USIZE: usize = 2000;
 // pub static MAX_PAYLOAD: usize = 262_144;
 
@@ -22,8 +22,18 @@ pub fn init_static() {
 
 
             PORT_STR = &PORT[..];
-            PORT_USIZE = PORT.parse().unwrap()
+            PORT_U16 = PORT.parse().unwrap()
         }
+    }
+
+    if cfg!(debug_assertions) {
+        println!("Debug mode on");
+        println!("\nVariables:\
+        \n  -PORT: {:?}\
+        \n  -MAX_VALUE_LEN: {:?}",
+                 get_port_usize(),
+                 get_max_value_usize()
+        )
     }
 }
 
@@ -34,7 +44,7 @@ pub fn init_static() {
 
 #[inline]
 pub fn get_port_usize() -> u16 {
-    unsafe { PORT_USIZE }
+    unsafe { PORT_U16 }
 }
 
 #[inline]

@@ -2,21 +2,12 @@ use rug::Integer;
 use rayon::prelude::*;
 use crate::database::answer_db;
 use crate::entities::{Output};
+use crate::statics::get_max_value_usize;
 
-#[inline]
-fn max_value_len() -> usize {
-    unsafe {
-        static mut MAX_VALUE_LEN: usize = 0;
-        if MAX_VALUE_LEN == 0 {
-            MAX_VALUE_LEN = crate::statics::get_max_value_usize();
-        }
-        MAX_VALUE_LEN
-    }
-}
 
 // Return Output with char {Y, N, P} if is prime, is not, or probably
 fn prime_b10(str_value: &str) -> String {
-    if str_value.len() > max_value_len() {
+    if str_value.len() > get_max_value_usize() {
         return "value exceed max size limit".to_string();
     }
     match str_value.parse::<Integer>() {

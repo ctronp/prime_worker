@@ -8,3 +8,4 @@ target
 .dockerignore
 .gitignore
 debug.Dockerfile
+test.Dockerfile

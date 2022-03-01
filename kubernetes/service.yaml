@@ -6,6 +6,11 @@ metadata:
     # gce = external; gce-internal = internal
     kubernetes.io/ingress.class: "gce"
     kubernetes.io/ingress.allow-http: "true"
+    kubernetes.io/ingress.global-static-ip-name:
+      valueFrom:
+        configMapKeyRef:
+          name: primes-config
+          key: static-ip
 spec:
   type: NodePort
   rules:

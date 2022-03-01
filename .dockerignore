@@ -1,6 +1,6 @@
 .git
 .github
-kubernetes
+short-kubernetes
 LoadTesting
 .idea
 target

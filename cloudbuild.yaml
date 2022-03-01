@@ -37,21 +37,23 @@ steps:
     args:
       - run
       - --filename=kubernetes/autoscaler.yaml
-      - --filename=kubernetes/deployment-big.yaml
-      - --filename=kubernetes/http2-service.yaml
+      - --filename=kubernetes/deployment.yaml
       - --filename=kubernetes/service.yaml
+      - --filename=kubernetes/long-configMap.yaml
+#      - --filename=kubernetes/http2-service.yaml
       - --image=us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
       - --location=us-central1
       - --cluster=central1-long-primes
 
-  ## Small Primes
+  ## Short Primes
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
       - run
       - --filename=kubernetes/autoscaler.yaml
-      - --filename=kubernetes/deployment-big.yaml
-      - --filename=kubernetes/http2-service.yaml
+      - --filename=kubernetes/deployment.yaml
       - --filename=kubernetes/service.yaml
+      - --filename=kubernetes/short-configMap.yaml
+#      - --filename=short-kubernetes/http2-service.yaml
       - --image=us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
       - --location=us-central1
       - --cluster=central1-small-primes

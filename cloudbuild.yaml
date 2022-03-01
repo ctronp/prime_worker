@@ -38,7 +38,7 @@ steps:
       - --filename=kubernetes/deployment.yaml
       - --filename=kubernetes/http2-service.yaml
       - --filename=kubernetes/service.yaml
-      - --image=us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}
+      - --image=us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
       - --location=us-central1
       - --cluster=central1-long-primes
 images:

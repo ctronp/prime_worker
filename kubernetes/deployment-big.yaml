@@ -26,3 +26,10 @@ spec:
             requests:
               memory: "250Mi"
               cpu: "3000m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            failureThreshold: 1
+            initialDelaySeconds: 10
+            periodSeconds: 5

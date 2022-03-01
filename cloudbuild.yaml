@@ -32,7 +32,7 @@ steps:
             'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest' ]
   # update gke
 
-    # Long Primes
+  ## Long Primes
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
       - run
@@ -44,7 +44,7 @@ steps:
       - --location=us-central1
       - --cluster=central1-long-primes
 
-    # Small Primes
+  ## Small Primes
   - name: "gcr.io/cloud-builders/gke-deploy"
     args:
       - run

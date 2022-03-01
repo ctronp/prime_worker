@@ -1,6 +1,5 @@
 .git
 .github
-kubernetes
 LoadTesting
 src/test.rs
 .idea

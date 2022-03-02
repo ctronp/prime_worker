@@ -1,13 +1,13 @@
 timeout: 2400s
 steps:
-  # download last built image to cache
+  # pull last built image to cache
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [ '-c',
       'docker pull
               us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
               || exit 0' ]
-  # push latest rust and distroless images
+  # pull latest rust and distroless images
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [ '-c',
@@ -31,32 +31,26 @@ steps:
     args: [ 'push',
             'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest' ]
   # update gke
-
-  ## Long Primes
-  - name: "gcr.io/cloud-builders/gke-deploy"
-    args:
-      - run
-      - --filename=kubernetes/autoscaler.yaml
-      - --filename=kubernetes/deployment.yaml
-      - --filename=kubernetes/service.yaml
-      - --filename=kubernetes/long-configMap.yaml
-#      - --filename=kubernetes/http2-service.yaml
-      - --image=us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
-      - --location=us-central1
-      - --cluster=central1-long-primes
-
-  ## Short Primes
-  - name: "gcr.io/cloud-builders/gke-deploy"
-    args:
-      - run
-      - --filename=kubernetes/autoscaler.yaml
-      - --filename=kubernetes/deployment.yaml
-      - --filename=kubernetes/service.yaml
-      - --filename=kubernetes/short-configMap.yaml
-#      - --filename=short-kubernetes/http2-service.yaml
-      - --image=us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
-      - --location=us-central1
-      - --cluster=central1-small-primes
+  # Going to be replaced with git-ops
+#  ## Long Primes
+#  - name: "gcr.io/cloud-builders/gke-deploy"
+#    args:
+#      - run
+##      - # Add every file
+#      - --filename=kubernetes/long-configMap.yaml
+#      - --image=us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
+#      - --location=us-central1
+#      - --cluster=central1-long-primes
+#
+#  ## Short Primes
+#  - name: "gcr.io/cloud-builders/gke-deploy"
+#    args:
+#      - run
+#      #      - # Add every file
+#      - --filename=kubernetes/short-configMap.yaml
+#      - --image=us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
+#      - --location=us-central1
+#      - --cluster=central1-small-primes
 # Deployment images
 images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}'

@@ -1,0 +1,16 @@
+apiVersion: networking.gke.io/v1
+kind: MultiClusterService
+metadata:
+  name: primes-mcs
+  namespace: primes
+spec:
+  template:
+    spec:
+      selector:
+        app: primes
+      ports:
+        - name: web
+          protocol: TCP
+          port: 8080
+          targetPort: 8080
+# https://cloud.google.com/kubernetes-engine/docs/how-to/multi-cluster-ingress#backendconfig_support

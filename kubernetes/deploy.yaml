@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: primes-deployment
+  namespace: primes
+  labels:
+    app: primes
+spec:
+  selector:
+    matchLabels:
+      app: primes
+  template:
+    metadata:
+      labels:
+        app: primes
+    spec:
+      containers:
+        - name: frontend
+          image: us-central1-docker.pkg.dev/primesnumbers/primes-numbers/prime_container:latest
+          ports:
+            - containerPort: 8080

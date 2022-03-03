@@ -1,8 +1,9 @@
+use rayon::prelude::*;
+use rug::Integer;
+
 use crate::database::answer_db;
 use crate::entities::Output;
 use crate::statics::get_max_value_usize;
-use rayon::prelude::*;
-use rug::Integer;
 
 // Return Output with char {Y, N, P} if is prime, is not, or probably
 fn prime_b10(str_value: &str) -> String {

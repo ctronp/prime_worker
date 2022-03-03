@@ -1,5 +1,6 @@
-use actix_web::{web, HttpResponse, Responder};
 use std::ops::DerefMut;
+
+use actix_web::{HttpResponse, Responder, web};
 
 use crate::entities;
 use crate::services::process_numbers;

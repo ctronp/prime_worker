@@ -1,17 +1,17 @@
+use std::time::Duration;
+
+use actix_web::{App, HttpServer, web};
+use actix_web::middleware::Logger;
+use tokio::join;
+use tokio::signal::unix::{signal, SignalKind};
+use tokio::time::sleep;
+
 mod controller;
 mod database;
 mod entities;
 mod services;
 mod statics;
 mod test;
-
-use actix_web::middleware::Logger;
-use actix_web::{web, App, HttpServer};
-use std::time::Duration;
-
-use tokio::join;
-use tokio::signal::unix::{signal, SignalKind};
-use tokio::time::sleep;
 
 async fn exit_handler() -> Result<(), Box<dyn std::error::Error>> {
     let mut stream = signal(SignalKind::interrupt())?;

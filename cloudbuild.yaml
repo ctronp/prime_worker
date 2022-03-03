@@ -26,7 +26,7 @@ steps:
   # Push Image with all tags
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'push',
-            '$us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}' ]
+            'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}' ]
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'push',
             'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest' ]

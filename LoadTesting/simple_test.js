@@ -4,7 +4,7 @@ import {sleep} from 'k6';
 export let options = {
     insecureSkipTLSVerify: true,
     noConnectionReuse: false,
-    vus: 3, // proportional to actix-web workers
+    vus: 5, // proportional to actix-web workers
     duration: '60s'
 }
 

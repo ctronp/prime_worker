@@ -13,20 +13,14 @@ steps:
     args: [ '-c',
       'docker pull docker.io/rust:latest && 
               docker pull gcr.io/distroless/cc:latest' ]
-  # pull cache image
-  - name: 'gcr.io/cloud-builders/docker'
-    entrypoint: 'bash'
-    args: [ '-c',
-      'docker pull 
-            us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest' ]
   # Build Output image
   - name: 'gcr.io/cloud-builders/docker'
     args: [ 'build',
+            '--cache-from',
+            'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest',
             '-t',
             'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}',
             '-t',
-            'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest',
-            '--cache-from',
             'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest',
             '.' ]
   # Push Image with all tags

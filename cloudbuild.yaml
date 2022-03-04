@@ -1,18 +1,5 @@
 timeout: 2400s
 steps:
-  # pull last built image to cache
-  - name: 'gcr.io/cloud-builders/docker'
-    entrypoint: 'bash'
-    args: [ '-c',
-      'docker pull
-              us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
-              || exit 0' ]
-  # pull latest rust and distroless images
-  - name: 'gcr.io/cloud-builders/docker'
-    entrypoint: 'bash'
-    args: [ '-c',
-      'docker pull docker.io/rust:latest && 
-              docker pull gcr.io/distroless/cc:latest' ]
   # Build Output image
   - name: 'gcr.io/kaniko-project/executor:latest'
     args: [ '--destination=us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest',

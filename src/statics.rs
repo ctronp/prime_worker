@@ -1,3 +1,6 @@
+#[cfg(test)]
+use std::time::Duration;
+
 use tokio::sync::OnceCell;
 
 static mut PORT_STR: &str = "8080";
@@ -44,7 +47,7 @@ pub async fn init_static() {
             )
         }
     })
-    .await;
+        .await;
 }
 
 // #[inline]
@@ -60,4 +63,14 @@ pub fn get_port_u16() -> u16 {
 #[inline]
 pub fn get_max_value_usize() -> usize {
     unsafe { MAX_VALUE_LEN_USIZE }
+}
+
+#[cfg(test)]
+pub async fn debug_initialize() {
+    static INIT: OnceCell<()> = OnceCell::const_new();
+    INIT.get_or_init(|| async {
+        std::thread::spawn(crate::main);
+        tokio::time::sleep(Duration::from_secs(10)).await;
+    })
+        .await;
 }

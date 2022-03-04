@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: primes-config
-data:
-  static-ip: "" # IP of external IP address
-  MAX_VALUE_LEN: "100"

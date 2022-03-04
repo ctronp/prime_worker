@@ -1,26 +1,15 @@
 #[cfg(test)]
-#[cfg(test)]
 mod integration_tests {
-    use crate::entities::{Input, Output};
-    use crate::statics::*;
-    use actix_web::http;
     use std::collections::HashMap;
-    use std::time::Duration;
-    use tokio::sync::OnceCell;
 
-    async fn initialize() {
-        static INIT: OnceCell<()> = OnceCell::const_new();
+    use actix_web::http;
 
-        INIT.get_or_init(|| async {
-            std::thread::spawn(crate::main);
-            tokio::time::sleep(Duration::from_secs(10)).await;
-        })
-        .await;
-    }
+    use crate::entities::{Input, Output};
+    use crate::statics::get_port_u16;
 
     #[actix_web::test]
     async fn test_index() {
-        initialize().await;
+        crate::statics::debug_initialize().await;
 
         let resp = reqwest::get(format!("http://0.0.0.0:{}/", get_port_u16()))
             .await
@@ -30,7 +19,7 @@ mod integration_tests {
 
     #[actix_web::test]
     async fn small_primes() {
-        initialize().await;
+        crate::statics::debug_initialize().await;
 
         let res = reqwest::Client::new()
             .post(format!("http://0.0.0.0:{}/primes", get_port_u16()))

@@ -14,44 +14,12 @@ steps:
       'docker pull docker.io/rust:latest && 
               docker pull gcr.io/distroless/cc:latest' ]
   # Build Output image
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'build',
-            '--cache-from',
-            'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest',
-            '-t',
-            'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}',
-            '-t',
-            'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest',
-            '.' ]
-  # Push Image with all tags
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'push',
-            'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}' ]
-  - name: 'gcr.io/cloud-builders/docker'
-    args: [ 'push',
-            'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest' ]
-  # update gke
-  # Going to be replaced with git-ops
-#  ## Long Primes
-#  - name: "gcr.io/cloud-builders/gke-deploy"
-#    args:
-#      - run
-##      - # Add every file
-#      - --filename=kubernetes/long-configMap.yaml
-#      - --image=us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
-#      - --location=us-central1
-#      - --cluster=central1-long-primes
-#
-#  ## Short Primes
-#  - name: "gcr.io/cloud-builders/gke-deploy"
-#    args:
-#      - run
-#      #      - # Add every file
-#      - --filename=kubernetes/short-configMap.yaml
-#      - --image=us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest
-#      - --location=us-central1
-#      - --cluster=central1-small-primes
-# Deployment images
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    args: [ '--destination=us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest',
+            '--destination=us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${SHORT_SHA}',
+            '--cache=true',
+            '--cache-ttl=24h'
+    ]
 images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${COMMIT_SHA}'
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest'

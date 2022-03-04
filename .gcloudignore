@@ -1,10 +1,7 @@
-.git
-.github
-LoadTesting
-src/test.rs
-.idea
-target
-.dockerignore
-.gitignore
-debug.Dockerfile
-test.Dockerfile
+# Ignore Everything
+/*
+
+# Except
+!src
+!Cargo.lock
+!Cargo.toml

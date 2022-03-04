@@ -7,6 +7,3 @@ steps:
             '--cache=true',
             '--cache-ttl=12h'
     ]
-images:
-  - 'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:${SHORT_SHA}'
-  - 'us-central1-docker.pkg.dev/$PROJECT_ID/${_REPOSITORY}/${_IMAGE}:latest'

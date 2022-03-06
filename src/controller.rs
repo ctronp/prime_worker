@@ -1,24 +1,24 @@
 use std::ops::DerefMut;
 
-use actix_web::{HttpRequest, HttpResponse, Responder, web};
+use actix_web::{web, HttpRequest, HttpResponse, Responder};
 
 use crate::entities;
 use crate::services::process_numbers;
 
-pub async fn primes_handler(_req: HttpRequest, mut input: web::Json<entities::Input>)
-                            -> impl Responder {
+pub async fn primes_handler(
+    _req: HttpRequest,
+    mut input: web::Json<entities::Input>,
+) -> impl Responder {
     let secret = match _req.headers().get("Secret") {
-        Some(secret) => {
-            match secret.to_str() {
-                Ok(value) => {
-                    if cfg!(debug_assertion) {
-                        println!("Secret: {}", value);
-                    };
-                    value
-                }
-                _ => return HttpResponse::Unauthorized().finish(),
+        Some(secret) => match secret.to_str() {
+            Ok(value) => {
+                if cfg!(debug_assertion) {
+                    println!("Secret: {}", value);
+                };
+                value
             }
-        }
+            _ => return HttpResponse::Unauthorized().finish(),
+        },
         _ => {
             return HttpResponse::Unauthorized().body("Unauthorized");
         }
@@ -27,21 +27,17 @@ pub async fn primes_handler(_req: HttpRequest, mut input: web::Json<entities::In
         return HttpResponse::Unauthorized().body("Unauthorized");
     }
 
-
     let output = match tokio::task::spawn_blocking(move || {
         process_numbers(input.values.deref_mut())
     })
-        .await
+    .await
     {
-        Ok(output) => {
-            match output {
-                Some(output) => output,
-                None => {
-                    return HttpResponse::BadRequest()
-                        .body(r##"{"Error":"max 20 values"}"##);
-                }
+        Ok(output) => match output {
+            Some(output) => output,
+            None => {
+                return HttpResponse::BadRequest().body(r##"{"Error":"max 20 values"}"##);
             }
-        }
+        },
         Err(_) => {
             return HttpResponse::InternalServerError()
                 .body(r##"{"Error":"Internal Server Error"}"##);
@@ -55,4 +51,3 @@ pub async fn primes_handler(_req: HttpRequest, mut input: web::Json<entities::In
         }
     }
 }
-

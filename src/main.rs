@@ -1,5 +1,5 @@
-use actix_web::{App, HttpServer, web};
 use actix_web::middleware::Logger;
+use actix_web::{web, App, HttpServer};
 use env_logger::Env;
 use tokio::join;
 
@@ -47,22 +47,22 @@ fn main() -> std::io::Result<()> {
             .build()
             .unwrap()
     })
-        .block_on(async move {
-            statics::init_static().await;
+    .block_on(async move {
+        statics::init_static().await;
 
-            println!("Initializing Server");
-            let to_return = HttpServer::new(|| {
-                App::new()
-                    .wrap(Logger::default())
-                    .route("/", web::get().to(|| async { "/" }))
-                    .route("/primes", web::post().to(controller::primes_handler))
-            })
-                .bind(("0.0.0.0", statics::get_port_u16()))?
-                .workers((cpus as f64).cbrt() as usize) // Actix Worker
-                .run();
-
-            println!("Server initialized");
-
-            join!(to_return).0
+        println!("Initializing Server");
+        let to_return = HttpServer::new(|| {
+            App::new()
+                .wrap(Logger::default())
+                .route("/", web::get().to(|| async { "/" }))
+                .route("/primes", web::post().to(controller::primes_handler))
         })
+        .bind(("0.0.0.0", statics::get_port_u16()))?
+        .workers((cpus as f64).cbrt() as usize) // Actix Worker
+        .run();
+
+        println!("Server initialized");
+
+        join!(to_return).0
+    })
 }

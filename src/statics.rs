@@ -63,7 +63,7 @@ pub async fn init_static() {
             )
         }
     })
-        .await;
+    .await;
 }
 
 #[inline]
@@ -93,5 +93,5 @@ pub async fn debug_initialize() {
         std::thread::spawn(crate::main);
         tokio::time::sleep(Duration::from_secs(10)).await;
     })
-        .await;
+    .await;
 }

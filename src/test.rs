@@ -23,10 +23,7 @@ mod integration_tests {
         crate::statics::debug_initialize().await;
 
         let mut header = HeaderMap::new();
-        header.insert(
-            "Secret",
-            crate::statics::get_secret().parse().unwrap(),
-        );
+        header.insert("Secret", crate::statics::get_secret().parse().unwrap());
 
         let res = reqwest::Client::new()
             .post(format!("http://0.0.0.0:{}/primes", get_port_u16()))

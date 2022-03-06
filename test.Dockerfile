@@ -11,5 +11,5 @@ RUN mkdir src && echo "fn main() {}" > src/main.rs
 RUN cargo fetch
 
 # COMPILATION
-COPY . .
+COPY src ./src
 CMD ["cargo", "test"]

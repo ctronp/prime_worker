@@ -1,13 +1,7 @@
-.git
-.github
-short-kubernetes
-LoadTesting
-.idea
-target
-.dockerignore
-.gcloudignore
-.gitignore
-cloudbuild.yaml
-debug.Dockerfile
-Dockerfile
-test.Dockerfile
+# Ignore Everything
+/*
+
+# Except
+!src
+!Cargo.toml
+!Cargo.lock

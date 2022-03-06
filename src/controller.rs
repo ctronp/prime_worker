@@ -10,7 +10,12 @@ pub async fn primes_handler(_req: HttpRequest, mut input: web::Json<entities::In
     let secret = match _req.headers().get("Secret") {
         Some(secret) => {
             match secret.to_str() {
-                Ok(value) => value,
+                Ok(value) => {
+                    if cfg!(debug_assertion) {
+                        println!("Secret: {}", value);
+                    };
+                    value
+                }
                 _ => return HttpResponse::Unauthorized().finish(),
             }
         }
@@ -18,7 +23,7 @@ pub async fn primes_handler(_req: HttpRequest, mut input: web::Json<entities::In
             return HttpResponse::Unauthorized().body("Unauthorized");
         }
     };
-    if crate::statics::check_header(secret) {
+    if !crate::statics::check_header(secret) {
         return HttpResponse::Unauthorized().body("Unauthorized");
     }
 

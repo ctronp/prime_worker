@@ -77,7 +77,7 @@ pub fn get_max_value_usize() -> usize {
 }
 
 #[inline]
-fn get_secret() -> &'static str {
+pub fn get_secret() -> &'static str {
     unsafe { SECRET_STR }
 }
 

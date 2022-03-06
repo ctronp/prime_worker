@@ -2,6 +2,7 @@ use std::time::Duration;
 
 use actix_web::{App, HttpServer, web};
 use actix_web::middleware::Logger;
+use env_logger::Env;
 use tokio::join;
 use tokio::signal::unix::{signal, SignalKind};
 use tokio::time::sleep;
@@ -35,8 +36,7 @@ fn main() -> std::io::Result<()> {
     }
 
     // Log to stdout
-    let mut log_builder = env_logger::Builder::from_default_env();
-    log_builder.target(env_logger::Target::Stderr).init();
+    env_logger::init_from_env(Env::default().default_filter_or("info"));
 
     rayon::ThreadPoolBuilder::new()
         .num_threads(cpus) // Rayon Worker

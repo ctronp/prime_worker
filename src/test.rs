@@ -4,6 +4,7 @@ mod integration_tests {
     use std::collections::HashMap;
 
     use actix_web::http;
+    use actix_web::web::Buf;
     use reqwest::header::HeaderMap;
 
     use crate::entities::{Input, Output};
@@ -131,5 +132,10 @@ mod integration_tests {
                 (input.values.pop().unwrap(), "Probably".to_string())
             ])
         );
+    }
+
+    #[actix_web::test]
+    async fn too_many_inputs() {
+        crate::statics::debug_initialize().await;
     }
 }

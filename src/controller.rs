@@ -11,12 +11,7 @@ pub async fn primes_handler(
 ) -> impl Responder {
     let secret = match _req.headers().get("Secret") {
         Some(secret) => match secret.to_str() {
-            Ok(value) => {
-                if cfg!(debug_assertion) {
-                    println!("Secret: {}", value);
-                };
-                value
-            }
+            Ok(value) => value,
             _ => return HttpResponse::Unauthorized().finish(),
         },
         _ => {

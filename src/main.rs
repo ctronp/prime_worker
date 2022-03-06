@@ -1,11 +1,7 @@
-use std::time::Duration;
-
 use actix_web::{App, HttpServer, web};
 use actix_web::middleware::Logger;
 use env_logger::Env;
 use tokio::join;
-use tokio::signal::unix::{signal, SignalKind};
-use tokio::time::sleep;
 
 mod controller;
 mod database;
@@ -14,14 +10,14 @@ mod services;
 mod statics;
 mod test;
 
-async fn exit_handler() -> Result<(), Box<dyn std::error::Error>> {
-    let mut stream = signal(SignalKind::interrupt())?;
-    stream.recv().await;
-    println!("Shutting Down in 20 sec");
-    sleep(Duration::from_secs(20)).await;
-    println!("Bye");
-    Ok(())
-}
+// async fn exit_handler() -> Result<(), Box<dyn std::error::Error>> {
+//     let mut stream = signal(SignalKind::interrupt())?;
+//     stream.recv().await;
+//     println!("Shutting Down in 20 sec");
+//     sleep(Duration::from_secs(20)).await;
+//     println!("Bye");
+//     Ok(())
+// }
 
 fn main() -> std::io::Result<()> {
     let v_cpus = num_cpus::get();
@@ -51,23 +47,22 @@ fn main() -> std::io::Result<()> {
             .build()
             .unwrap()
     })
-    .block_on(async move {
-        let exit_h = exit_handler();
-        statics::init_static().await;
+        .block_on(async move {
+            statics::init_static().await;
 
-        println!("Initializing Server");
-        let to_return = HttpServer::new(|| {
-            App::new()
-                .wrap(Logger::default())
-                .route("/", web::get().to(|| async { "/" }))
-                .route("/primes", web::post().to(controller::primes_handler))
+            println!("Initializing Server");
+            let to_return = HttpServer::new(|| {
+                App::new()
+                    .wrap(Logger::default())
+                    .route("/", web::get().to(|| async { "/" }))
+                    .route("/primes", web::post().to(controller::primes_handler))
+            })
+                .bind(("0.0.0.0", statics::get_port_u16()))?
+                .workers((cpus as f64).cbrt() as usize) // Actix Worker
+                .run();
+
+            println!("Server initialized");
+
+            join!(to_return).0
         })
-        .bind(("0.0.0.0", statics::get_port_u16()))?
-        .workers((cpus as f64).cbrt() as usize) // Actix Worker
-        .run();
-
-        println!("Server initialized");
-
-        join!(to_return, exit_h).0
-    })
 }

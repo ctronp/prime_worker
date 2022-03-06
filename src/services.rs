@@ -33,8 +33,11 @@ fn process_value(value: &mut String) -> (String, String) {
     )
 }
 
-pub fn process_numbers(input: &mut [String]) -> Output {
-    Output {
-        values: input.into_par_iter().map(process_value).collect(),
+pub fn process_numbers(input: &mut [String]) -> Option<Output> {
+    if input.len() > crate::statics::get_max_value_usize() {
+        return None;
     }
+    Some(Output {
+        values: input.into_par_iter().map(process_value).collect(),
+    })
 }

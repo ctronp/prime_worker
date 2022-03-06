@@ -1,7 +1,7 @@
 # Ignore Everything
 /*
 
-# Except
+# Except for the following
 !src
 !Cargo.toml
 !Cargo.lock

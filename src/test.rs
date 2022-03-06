@@ -36,7 +36,7 @@ mod integration_tests {
             .unwrap();
 
         let output = res.json::<Output>().await.unwrap();
-        assert_eq!(
+        pretty_assertions::assert_eq!(
             output.values,
             HashMap::from([
                 ("1".to_string(), "No".to_string()),

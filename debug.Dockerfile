@@ -11,7 +11,7 @@ RUN mkdir src && echo "fn main() {}" > src/main.rs
 RUN cargo fetch
 
 # COMPILATION
-COPY . .
+COPY src ./src
 RUN cargo build
 
 FROM gcr.io/distroless/cc:latest

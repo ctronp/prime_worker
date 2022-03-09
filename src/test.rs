@@ -1,10 +1,9 @@
 #[cfg(test)]
-#[cfg(test)]
 mod integration_tests {
+    #[cfg(test)]
     use std::collections::HashMap;
 
     use actix_web::http;
-    use actix_web::web::Buf;
     use reqwest::header::HeaderMap;
 
     use crate::entities::{Input, Output};
@@ -137,5 +136,44 @@ mod integration_tests {
     #[actix_web::test]
     async fn too_many_inputs() {
         crate::statics::debug_initialize().await;
+
+        let input = Input {
+            values: vec![
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+                "1".to_string(),
+            ],
+        };
+
+        let mut header = HeaderMap::new();
+        header.insert("Secret", crate::statics::get_secret().parse().unwrap());
+
+        let response = reqwest::Client::new()
+            .post(format!("http://0.0.0.0:{}/primes", get_port_u16()))
+            .json(&input)
+            .headers(header)
+            .send()
+            .await
+            .unwrap();
+
+        pretty_assertions::assert_ne!(response.status(), http::StatusCode::BAD_REQUEST);
     }
 }

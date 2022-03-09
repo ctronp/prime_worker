@@ -30,4 +30,5 @@ strip = true
 
 [profile.dev]
 opt-level = 1
+incremental = true
 debug = true

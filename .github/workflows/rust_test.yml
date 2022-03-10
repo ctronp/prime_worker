@@ -24,12 +24,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: update
+      - name: update rustup
         run: rustup update
       - name: Run tests
         run: cargo test --verbose
-#      - name: Run
-#        run: cargo run &
-#      - uses: grafana/k6-action
-#        with:
-#          filename: LoadTesting/simple_test.js

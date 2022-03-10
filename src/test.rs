@@ -176,4 +176,34 @@ mod integration_tests {
 
         pretty_assertions::assert_ne!(response.status(), http::StatusCode::BAD_REQUEST);
     }
+
+    #[actix_web::test]
+    async fn values_too_many_chars() {
+        crate::statics::debug_initialize().await;
+
+        let first_value = "1".repeat(crate::statics::get_max_value_usize() + 1);
+
+        let input = Input {
+            values: vec![first_value.clone()],
+        };
+
+        let mut header = HeaderMap::new();
+        header.insert("Secret", crate::statics::get_secret().parse().unwrap());
+
+        let response = reqwest::Client::new()
+            .post(format!("http://0.0.0.0:{}/primes", get_port_u16()))
+            .json(&input)
+            .headers(header)
+            .send()
+            .await
+            .unwrap()
+            .json::<Output>()
+            .await
+            .unwrap();
+
+        pretty_assertions::assert_eq!(
+            response.values,
+            HashMap::from([(first_value, "value exceed max size limit".to_string())])
+        );
+    }
 }

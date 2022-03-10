@@ -2,8 +2,8 @@ timeout: 2400s
 steps:
   # Build Output image
   - name: 'gcr.io/kaniko-project/executor:latest'
-    args: [ '--destination=us-central1-docker.pkg.dev/$PROJECT_ID/us/${_IMAGE}:latest',
-            '--destination=us-central1-docker.pkg.dev/$PROJECT_ID/us/${_IMAGE}:${SHORT_SHA}',
+    args: [ '--destination=us-docker.pkg.dev/$PROJECT_ID/us/${_IMAGE}:latest',
+            '--destination=us-docker.pkg.dev/$PROJECT_ID/us/${_IMAGE}:${SHORT_SHA}',
             '--cache=true',
             '--cache-ttl=12h'
     ]

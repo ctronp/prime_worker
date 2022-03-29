@@ -5,9 +5,8 @@ use tokio::sync::OnceCell;
 
 static mut PORT_STR: &str = "8080";
 static mut PORT_U16: u16 = 8080;
-static mut MAX_VALUE_LEN_USIZE: usize = 2000;
-static mut SECRET_STR: &str = "Wh$qZCjLi7tZ9be2cy26@L&eGuTp5EBys&mJZVY%99iC\
-    Nqd42@rM2!ijLnNJ4aA4oHr5VXD!bD!jp#MFgrQf3wZ@Ac8q$ThQyhSf";
+static mut MAX_VALUE_LEN_USIZE: usize = 200;
+static mut SECRET_STR: &str = "SecretStringExample1111000011110000";
 
 pub async fn init_static() {
     static INIT: OnceCell<()> = OnceCell::const_new();

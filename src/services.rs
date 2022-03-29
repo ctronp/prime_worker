@@ -5,7 +5,7 @@ use crate::database::answer_db;
 use crate::entities::Output;
 use crate::statics::get_max_value_usize;
 
-// Return Output with char {Y, N, P} if is prime, is not, or probably
+/// Output a String with the answer of the Primality Test
 fn prime_b10(str_value: &str) -> String {
     if str_value.len() > get_max_value_usize() {
         return "value exceed max size limit".to_string();
@@ -20,7 +20,7 @@ fn prime_b10(str_value: &str) -> String {
     }
 }
 
-// Processed by rayon
+/// needs to be re-written, it's not efficient and it's not using the database or async
 fn process_value(value: &mut String) -> (String, String) {
     let val_ref = &value[..];
     (

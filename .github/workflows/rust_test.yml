@@ -27,4 +27,4 @@ jobs:
       - name: update rustup
         run: rustup update
       - name: Run tests
-        run: cargo test --verbose
+        run: cargo test

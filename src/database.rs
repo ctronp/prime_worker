@@ -26,6 +26,7 @@
 //     DatabaseQ {}
 // }
 
+/// Database, need changes to be async
 #[inline]
 pub fn answer_db(_value: &str) -> Option<String> {
     None

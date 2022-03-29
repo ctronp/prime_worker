@@ -51,16 +51,19 @@ pub async fn init_static() {
             PORT_STR = &PORT[..];
             PORT_U16 = PORT.parse().unwrap();
         }
+
         if cfg!(debug_assertions) {
             println!("Debug mode on");
-            println!(
-                "\nVariables:\
+        } else {
+            println!("Debug mode off");
+        }
+        println!(
+            "\nVariables:\
         \n  -PORT: {:?}\
         \n  -MAX_VALUE_LEN: {:?}",
-                get_port_u16(),
-                get_max_value_usize()
-            )
-        }
+            get_port_u16(),
+            get_max_value_usize()
+        );
     })
     .await;
 }

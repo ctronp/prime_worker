@@ -50,6 +50,9 @@ mod integration_tests {
     #[actix_web::test]
     async fn large_primes() {
         crate::statics::debug_initialize().await;
+        if (crate::statics::get_max_value_usize()) < 2000 {
+            return;
+        }
 
         let mut header = HeaderMap::new();
         header.insert("Secret", crate::statics::get_secret().parse().unwrap());

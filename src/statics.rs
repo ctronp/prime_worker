@@ -16,7 +16,7 @@ pub async fn init_static() {
 
     INIT.get_or_init(|| async {
         unsafe {
-            println!("Initializing Values");
+            log::debug!("Initializing Values");
             match std::env::var("PORT") {
                 Ok(value) => {
                     if !value.is_empty() {
@@ -53,11 +53,11 @@ pub async fn init_static() {
         }
 
         if cfg!(debug_assertions) {
-            println!("Debug mode on");
+            log::debug!("Debug mode on");
         } else {
-            println!("Debug mode off");
+            log::debug!("Debug mode off");
         }
-        println!(
+        log::info!(
             "\nVariables:\
         \n  -PORT: {:?}\
         \n  -MAX_VALUE_LEN: {:?}",

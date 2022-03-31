@@ -25,14 +25,14 @@ fn main() -> std::io::Result<()> {
     let smt = v_cpus != p_cpus;
     let cpus = v_cpus;
 
-    if smt {
-        println!("smt (hyper-threading) enabled")
-    } else {
-        println!("smt (hyper-threading) disabled")
-    }
-
     // Log to stdout
     env_logger::init_from_env(Env::default().default_filter_or("info"));
+
+    if smt {
+        log::info!("smt (hyper-threading) enabled")
+    } else {
+        log::info!("smt (hyper-threading) disabled")
+    }
 
     rayon::ThreadPoolBuilder::new()
         .num_threads(cpus) // Rayon Worker
@@ -50,7 +50,7 @@ fn main() -> std::io::Result<()> {
     .block_on(async move {
         statics::init_static().await;
 
-        println!("Initializing Server");
+        log::info!("Initializing Server");
         let to_return = HttpServer::new(|| {
             App::new()
                 .wrap(Logger::default())
@@ -61,7 +61,7 @@ fn main() -> std::io::Result<()> {
         .workers((cpus as f64).cbrt() as usize) // Actix Worker
         .run();
 
-        println!("Server initialized");
+        log::info!("Server initialized");
 
         join!(to_return).0
     })

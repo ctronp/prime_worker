@@ -50,7 +50,7 @@ mod integration_tests {
     #[actix_web::test]
     async fn large_primes() {
         crate::statics::debug_initialize().await;
-        if (crate::statics::get_max_value_usize()) < 2000 {
+        if (crate::statics::get_max_len_usize()) < 2000 {
             return;
         }
 
@@ -184,7 +184,7 @@ mod integration_tests {
     async fn values_too_many_chars() {
         crate::statics::debug_initialize().await;
 
-        let first_value = "1".repeat(crate::statics::get_max_value_usize() + 1);
+        let first_value = "1".repeat(crate::statics::get_max_len_usize() + 1);
 
         let input = Input {
             values: vec![first_value.clone()],

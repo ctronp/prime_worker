@@ -3,11 +3,11 @@ use rug::Integer;
 
 use crate::database::answer_db;
 use crate::entities::Output;
-use crate::statics::get_max_value_usize;
+use crate::statics::get_max_len_usize;
 
 /// Output a String with the answer of the Primality Test
 fn prime_b10(str_value: &str) -> String {
-    if str_value.len() > get_max_value_usize() {
+    if str_value.len() > get_max_len_usize() {
         return "value exceed max size limit".to_string();
     }
     match str_value.parse::<Integer>() {
@@ -34,7 +34,7 @@ fn process_value(value: &mut String) -> (String, String) {
 }
 
 pub fn process_numbers(input: &mut [String]) -> Option<Output> {
-    if input.len() > crate::statics::get_max_value_usize() {
+    if input.len() > crate::statics::get_max_len_usize() {
         return None;
     }
     Some(Output {

@@ -1,5 +1,6 @@
 ARG PORT=8080
 ARG MAX_VALUE_LEN=2000
+ARG RUST_LOG=info,warn,error
 
 FROM docker.io/rust:latest AS build
 
@@ -21,13 +22,18 @@ COPY --from=build /app/target/release/api /
 # Copy anything else
 
 
-ARG MAX_VALUE_LEN
-ENV MAX_VALUE_LEN $MAX_VALUE_LEN
-
+# ENV VARS
 ARG PORT
-ENV PORT $PORT
-EXPOSE $PORT
+ARG MAX_VALUE_LEN
+ARG RUST_LOG
 
+ENV MAX_VALUE_LEN $MAX_VALUE_LEN
+ENV PORT $PORT
+ENV RUST_LOG $RUST_LOG
+
+# PRE-RUN
+EXPOSE $PORT
 USER nonroot
 
+# RUN
 CMD ["./api"]

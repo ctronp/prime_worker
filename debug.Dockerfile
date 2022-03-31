@@ -1,5 +1,6 @@
 ARG PORT=8080
 ARG MAX_VALUE_LEN=2000
+ARG RUST_LOG=trace
 
 FROM docker.io/rust:latest AS build
 
@@ -18,13 +19,18 @@ FROM gcr.io/distroless/cc:latest
 
 COPY --from=build /app/target/debug/api /
 
-ARG MAX_VALUE_LEN
-ENV MAX_VALUE_LEN $MAX_VALUE_LEN
-
+# ENV VARS
 ARG PORT
-ENV PORT $PORT
-EXPOSE $PORT
+ARG MAX_VALUE_LEN
+ARG RUST_LOG
 
+ENV PORT $PORT
+ENV MAX_VALUE_LEN $MAX_VALUE_LEN
+ENV RUST_LOG $RUST_LOG
+
+# PRE-RUN
+EXPOSE $PORT
 USER nonroot
 
+# RUN
 CMD ["./api"]

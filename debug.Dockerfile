@@ -25,4 +25,6 @@ ARG PORT
 ENV PORT $PORT
 EXPOSE $PORT
 
+USER nonroot
+
 CMD ["./api"]

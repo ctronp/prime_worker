@@ -12,4 +12,6 @@ RUN cargo fetch
 
 # COMPILATION
 COPY src ./src
+USER nonroot
+
 CMD ["cargo", "test"]

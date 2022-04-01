@@ -23,8 +23,5 @@ ENV PORT $PORT
 ENV MAX_LEN $MAX_LEN
 ENV RUST_LOG $RUST_LOG
 
-# PRE-RUN
-USER nonroot
-
 # RUN
 CMD ["cargo", "test"]

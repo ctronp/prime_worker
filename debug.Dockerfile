@@ -30,7 +30,7 @@ ENV RUST_LOG $RUST_LOG
 
 # PRE-RUN
 EXPOSE $PORT
-USER nonroot
+USER nonroot:nonroot
 
 # RUN
 CMD ["./api"]

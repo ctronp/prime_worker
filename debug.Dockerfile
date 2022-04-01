@@ -21,7 +21,7 @@ COPY --from=build /app/target/debug/api /
 
 # ENV VARS
 ARG PORT
-ARG MAX_VALUE_LEN
+ARG MAX_LEN
 ARG RUST_LOG
 
 ENV PORT $PORT

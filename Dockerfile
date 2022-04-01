@@ -24,7 +24,7 @@ COPY --from=build /app/target/release/api /
 
 # ENV VARS
 ARG PORT
-ARG MAX_VALUE_LEN
+ARG MAX_LEN
 ARG RUST_LOG
 
 ENV MAX_LEN $MAX_LEN

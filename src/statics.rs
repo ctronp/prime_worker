@@ -3,8 +3,8 @@ use std::time::Duration;
 
 use tokio::sync::OnceCell;
 
-static mut PORT_STR: &str = "80";
-static mut PORT_U16: u16 = 80;
+static mut PORT_STR: &str = "8080";
+static mut PORT_U16: u16 = 8080;
 static mut MAX_LEN_USIZE: usize = 200;
 static mut SECRET_STR: &str = "SecretStringExample1111000011110000";
 

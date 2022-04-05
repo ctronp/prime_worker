@@ -57,7 +57,7 @@ pub async fn init_static() {
                         SECRET_HEADER = SECRET_HEADER_STR.to_string();
                     }
                 }
-                Err(_) => SECRET = SECRET_HEADER_STR.to_string(),
+                Err(_) => SECRET_HEADER = SECRET_HEADER_STR.to_string(),
             }
 
             SECRET_HEADER_STR = &SECRET_HEADER;

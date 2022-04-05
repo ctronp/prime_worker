@@ -177,7 +177,7 @@ mod integration_tests {
             .await
             .unwrap();
 
-        pretty_assertions::assert_ne!(response.status(), http::StatusCode::BAD_REQUEST);
+        pretty_assertions::assert_eq!(response.status(), http::StatusCode::BAD_REQUEST);
     }
 
     #[actix_web::test]
@@ -199,10 +199,10 @@ mod integration_tests {
             .headers(header)
             .send()
             .await
-            .unwrap()
+            .unwrap_or_else(|_| panic!("Request failed"))
             .json::<Output>()
             .await
-            .unwrap();
+            .unwrap_or_else(|_| panic!("cant parse response"));
 
         pretty_assertions::assert_eq!(
             response.values,

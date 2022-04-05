@@ -40,9 +40,11 @@ pub async fn primes_handler(
     };
 
     match serde_json::to_string(&output) {
-        Ok(body) => HttpResponse::Ok().body(body),
-        Err(_) => {
-            HttpResponse::InternalServerError().body(r##"{"Error":"Internal Server Error"}"##)
-        }
+        Ok(body) => HttpResponse::Ok()
+            .append_header(("Content-Type", "application/json"))
+            .body(body),
+        Err(_) => HttpResponse::InternalServerError()
+            .append_header(("Content-Type", "application/json"))
+            .body(r##"{"Error":"Internal Server Error"}"##),
     }
 }

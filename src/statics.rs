@@ -6,6 +6,7 @@ use tokio::sync::OnceCell;
 static mut PORT_STR: &str = "8080";
 static mut PORT_U16: u16 = 8080;
 static mut MAX_LEN_USIZE: usize = 200;
+static mut SECRET_HEADER_STR: &str = "Secret";
 static mut SECRET_STR: &str = "SecretStringExample1111000011110000";
 
 pub async fn init_static() {
@@ -13,6 +14,7 @@ pub async fn init_static() {
     static mut PORT: String = String::new();
     static mut MAX_LEN: String = String::new();
     static mut SECRET: String = String::new();
+    static mut SECRET_HEADER: String = String::new();
 
     INIT.get_or_init(|| async {
         unsafe {
@@ -47,7 +49,19 @@ pub async fn init_static() {
                 }
                 Err(_) => SECRET = SECRET_STR.to_string(),
             }
+            match std::env::var("SECRET_HEADER") {
+                Ok(value) => {
+                    if !value.is_empty() {
+                        SECRET_HEADER = value;
+                    } else {
+                        SECRET_HEADER = SECRET_HEADER_STR.to_string();
+                    }
+                }
+                Err(_) => SECRET = SECRET_HEADER_STR.to_string(),
+            }
 
+            SECRET_HEADER_STR = &SECRET_HEADER;
+            SECRET_STR = &SECRET;
             PORT_STR = &PORT[..];
             PORT_U16 = PORT.parse().unwrap();
         }

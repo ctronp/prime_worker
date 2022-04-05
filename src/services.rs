@@ -34,7 +34,7 @@ fn process_value(value: &mut String) -> (String, String) {
 }
 
 pub fn process_numbers(input: &mut [String]) -> Option<Output> {
-    if input.len() > crate::statics::get_max_len_usize() {
+    if input.len() > 20 {
         return None;
     }
     Some(Output {

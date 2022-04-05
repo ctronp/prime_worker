@@ -93,6 +93,11 @@ pub fn get_max_len_usize() -> usize {
 }
 
 #[inline]
+pub fn get_secret_header() -> &'static str {
+    unsafe { SECRET_HEADER_STR }
+}
+
+#[inline]
 pub fn get_secret() -> &'static str {
     unsafe { SECRET_STR }
 }

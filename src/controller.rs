@@ -9,7 +9,7 @@ pub async fn primes_handler(
     _req: HttpRequest,
     mut input: web::Json<entities::Input>,
 ) -> impl Responder {
-    let secret = match _req.headers().get("Secret") {
+    let secret = match _req.headers().get(crate::statics::get_secret_header()) {
         Some(secret) => match secret.to_str() {
             Ok(value) => value,
             _ => return HttpResponse::Unauthorized().finish(),

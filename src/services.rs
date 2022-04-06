@@ -11,7 +11,7 @@ fn prime_b10(str_value: &str) -> String {
         return "value exceed max size limit".to_string();
     }
     match str_value.parse::<Integer>() {
-        Ok(n) => match n.is_probably_prime(51) {
+        Ok(n) => match n.is_probably_prime(64) {
             rug::integer::IsPrime::Yes => "Yes".to_string(),
             rug::integer::IsPrime::Probably => "Probably".to_string(),
             rug::integer::IsPrime::No => "No".to_string(),

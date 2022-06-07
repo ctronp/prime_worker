@@ -4,7 +4,6 @@ use env_logger::Env;
 use tokio::join;
 
 mod controller;
-mod database;
 mod entities;
 mod services;
 mod statics;

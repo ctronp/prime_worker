@@ -1,7 +1,6 @@
 use rayon::prelude::*;
 use rug::Integer;
 
-use crate::database::answer_db;
 use crate::entities::Output;
 use crate::statics::get_max_len_usize;
 

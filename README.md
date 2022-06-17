@@ -67,4 +67,4 @@ return the numbers as keys and the result as value:
 if the result is ```Probably``` it means that it passed 64 iterations
 of Miller Rabin primality test.
 
-The probability of the number not being a prime is $\ \frac{3}{4}^64 = 10^{-8} $
+The probability of the number not being a prime is $\ \frac{3}{4}^{64} = 10^{-8} $

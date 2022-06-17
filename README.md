@@ -41,7 +41,9 @@ return the numbers as keys and the result as value:
 
 ### Example:
 
-- input:
+#### input:
+
+The Json can have at most 20 values.
 
 ```json
 {
@@ -53,7 +55,8 @@ return the numbers as keys and the result as value:
 }
 ```
 
-- output:
+#### output:
+
 ```json
 {
   "1": "No",

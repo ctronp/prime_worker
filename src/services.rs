@@ -1,7 +1,6 @@
 use rayon::prelude::*;
 use rug::Integer;
 
-use crate::database::answer_db;
 use crate::entities::Output;
 use crate::statics::get_max_len_usize;
 
@@ -22,15 +21,7 @@ fn prime_b10(str_value: &str) -> String {
 
 /// needs to be re-written, it's not efficient and it's not using the database or async
 fn process_value(value: &mut String) -> (String, String) {
-    let val_ref = &value[..];
-    (
-        value.to_string(),
-        if let Some(query) = answer_db(val_ref) {
-            query
-        } else {
-            prime_b10(value)
-        },
-    )
+    (value.to_string(), prime_b10(value))
 }
 
 pub fn process_numbers(input: &mut [String]) -> Option<Output> {

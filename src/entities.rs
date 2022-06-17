@@ -11,12 +11,3 @@ pub struct Input {
 pub struct Output {
     pub values: HashMap<String, String>,
 }
-
-// impl Output {
-//     #[inline]
-//     fn new(cap: usize) -> Self{
-//         Self {
-//             values: HashMap::with_capacity(cap)
-//         }
-//     }
-// }

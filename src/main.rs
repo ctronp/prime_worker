@@ -9,15 +9,6 @@ mod services;
 mod statics;
 mod test;
 
-// async fn exit_handler() -> Result<(), Box<dyn std::error::Error>> {
-//     let mut stream = signal(SignalKind::interrupt())?;
-//     stream.recv().await;
-//     println!("Shutting Down in 20 sec");
-//     sleep(Duration::from_secs(20)).await;
-//     println!("Bye");
-//     Ok(())
-// }
-
 fn main() -> std::io::Result<()> {
     let v_cpus = num_cpus::get();
     let p_cpus = num_cpus::get_physical();
